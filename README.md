@@ -1,7 +1,8 @@
 # BIDS2NDA
 Extract [NIMH Data Archive](https://nda.nih.gov/) compatible metadata from [Brain Imaging Data Structure (BIDS)](https://bids-specification.readthedocs.io/) compatible datasets.
 
-This builds a [`image03.csv`](https://nda.nih.gov/data-structure/image03) data structure for upload with [nda-tools](https://github.com/NDAR/nda-tools) or [web uploader](https://nda.nih.gov/vt/). Data must first be organized in BIDS (see [bids-validator](https://bids-validator.readthedocs.io/en/stable/)) and [NDA's Global Unique IDentifiers](https://nda.nih.gov/nda/data-standards#guid) must have already been generated.
+This builds a [`image03.csv`](https://nda.nih.gov/data-structure/image03) data structure for upload with [nda-tools](https://github.com/NDAR/nda-tools) or [web uploader](https://nda.nih.gov/vt/).
+Data must first be organized in BIDS (see [bids-validator](https://bids-validator.readthedocs.io/en/stable/)) and [NDA's Global Unique IDentifiers](https://nda.nih.gov/nda/data-standards#guid) must have already been generated.
 
 ## Installation
 
@@ -50,15 +51,18 @@ The is the file format produced by the [GUID Tool](https://nda.nih.gov/nda/nda-t
 
 `<participant_id> - <GUID>`
 
-It is not part of the BIDS specification. The file translates BIDS subject id into NDA participant id (GUID) and can be stored anywhere. Its location is explicitly given to the `bids2nda` command.
+It is not part of the BIDS specification.
+The file translates BIDS subject id into NDA participant id (GUID) and can be stored anywhere.
+Its location is explicitly given to the `bids2nda` command.
 
 ### Participants File
-A [Participants File](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files.html#participants-file) is at the BIDS root like `BIDS/participants.tsv`. It should at least have columns `participant_id`, `age`, and `sex`.
+A [Participants File](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files.html#participants-file) is at the BIDS root like `BIDS/participants.tsv`.
+It should at least have columns `participant_id`, `age`, and `sex`.
 
 |col|desc|notes|
 |---|---|---|
 |`particiapnt_id` | like `sub-X` | does not include session label (See [Sessions File](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files.html#sessions-file). Not supported here) |
-|`age`            | number in years | converted to months for NDA's `interview_age`|
+|`age` | number in years | converted to months for NDA's `interview_age`|
 |`sex` |||
 
 Contents could look like
@@ -69,7 +73,8 @@ sub-100000  	M	46
 
 ### Scans File
 
-[Scans File](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files.html#scans-file) is at the session (or subject if session is omitted) level like `BIDS/sub-X/ses-1/sub-X_ses-1_scans.tsv`. It must have at least `filename` and `acq_time`.
+[Scans File](https://bids-specification.readthedocs.io/en/stable/modality-agnostic-files.html#scans-file) is at the session (or subject if session is omitted) level like `BIDS/sub-X/ses-1/sub-X_ses-1_scans.tsv`. 
+It must have at least `filename` and `acq_time`.
 
 |col|desc|notes|
 |---|---|---|
@@ -88,5 +93,6 @@ acq_time	filename
 See [/examples](/examples)
 
 ## Notes:
-Column `'experiment_id'` must be manually filled. For `_bold` suffixes, the value stored in the json sidecar with the key `ExperimentID` will be used.
+Column `'experiment_id'` must be manually filled.
+For `_bold` suffixes, the value stored in the json sidecar with the key `ExperimentID` will be used.
 This is based on experiment IDs received from NDA after setting the study up through the NDA website [here](https://ndar.nih.gov/user/dashboard/collections.html).

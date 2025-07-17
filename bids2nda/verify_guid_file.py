@@ -61,7 +61,9 @@ def verify_guid_file(filepath):
         print(f"Could not read file {filepath}")
         print("Error details:", read_error)
 
-# Example usage
+# Support running as a script
+# Example usage: 
+#    python verify_guid_file.py myids.txt
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:

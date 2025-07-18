@@ -132,10 +132,17 @@ def run(args):
     # Normalize GUID mapping keys by removing 'sub-' if present
     guid_mapping = {key.replace('sub-', ''): value for key, value in guid_mapping.items()}
 
-    # Load subject list
-    with open(args.subject_list, 'r') as f:
-        all_subjects = [line.strip() for line in f]
-            
+    # Load participants file
+    participants_file = os.path.join(args.bids_directory, "participants.tsv")
+    participants_df = pd.read_csv(participants_file, header=0, sep="\t")
+
+    # Check if required columns exist
+    if 'age' not in participants_df.columns or 'sex' not in participants_df.columns:
+        raise Exception(f"{participants_file} must have columns 'age' and 'sex' for nda columns 'interview_age' and 'sex'")
+        
+    # Extract subject list from participant IDs
+    all_subjects = [sub.replace('sub-', '') for sub in participants_df['participant_id']]
+    
     # Check which subjects are actually present in GUID mapping
     missing_subjects = []
     valid_subjects = []
@@ -191,12 +198,6 @@ def run(args):
     units_dict = {"mm": "Millimeters",
                   "sec": "Seconds",
                   "msec": "Milliseconds"}
-
-    participants_file = os.path.join(args.bids_directory, "participants.tsv")
-    participants_df = pd.read_csv(participants_file, header=0, sep="\t")
-    if 'age' not in participants_df.columns or 'sex' not in participants_df.columns:
-        raise Exception(f"{participants_file} must have columns 'age' and 'sex' for nda columns 'interview_age' and 'sex'")
-
 
     image03_dict = OrderedDict()
     for file in glob(os.path.join(args.bids_directory, "sub-*", "*", "sub-*.nii.gz")) + \

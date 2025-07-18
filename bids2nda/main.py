@@ -474,7 +474,14 @@ def main():
     try:
         run(args)
     except Exception as e:
-        print(f"Error: {e}")
+        import sys
+        import traceback
+        print("An error occurred during metadata extraction:", file=sys.stderr)
+        print("-" * 50, file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)  # Prints full traceback to stderr
+        print("-" * 50, file=sys.stderr)
+        print(f"Error type: {type(e)}", file=sys.stderr)
+        print(f"Error details: {e}", file=sys.stderr)
         return 1    
     
     print("Metadata extraction complete.")
